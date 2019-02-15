@@ -1,5 +1,6 @@
 package com.javamaster.config;
 
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.converter.MessageConverter;
 import org.springframework.messaging.handler.invocation.HandlerMethodArgumentResolver;
@@ -13,9 +14,11 @@ import java.util.List;
 
 @Configuration
 @EnableWebSocketMessageBroker
-//public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer {
-public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
+@ComponentScan(basePackages = "com.javamaster.controller")
+public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer {
+//public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
+/*
 
 
     @Override
@@ -25,8 +28,9 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
-        //registry.enableSimpleBroker("/topic", "/user");
+       // registry.enableSimpleBroker("/topic", "/user");
         registry.enableSimpleBroker("/topic");
+      //  registry.enableSimpleBroker("/user");
         registry.setApplicationDestinationPrefixes("/app");
     }
 
@@ -46,7 +50,18 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     public boolean configureMessageConverters(List<MessageConverter> list) {
         return true;
     }
+*/
 
+    @Override
+    public void configureMessageBroker(MessageBrokerRegistry config) {
+        config.enableSimpleBroker("/topic");
+        config.setApplicationDestinationPrefixes("/app");
+    }
+
+    @Override
+    public void registerStompEndpoints(StompEndpointRegistry registry) {
+        registry.addEndpoint("/chat").withSockJS();
+    }
 
 
 

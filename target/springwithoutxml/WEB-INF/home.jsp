@@ -15,7 +15,7 @@ Received Message To Me Only: <span id="received"></span><br/><br/>
 <script src="resources/stomp.js"></script>
 <script>
     $(document).ready(function() {
-        var socket = new SockJS("/ws");
+        var socket = new SockJS("/chat");
         var stompClient = Stomp.over(socket);
         var userName = "bob";
 
@@ -26,7 +26,7 @@ Received Message To Me Only: <span id="received"></span><br/><br/>
             // connect callback
             // subscribe to
             //stompClient.subscribe('/user/' + userName + '/reply', function(frame2) {
-                stompClient.subscribe('/topic/greeting', function(frame2) {
+            stompClient.subscribe('/topic/message', function(frame2) {
                 var msg = JSON.parse(frame2.body);
                 $('#received').html(msg);
             });
@@ -39,7 +39,7 @@ Received Message To Me Only: <span id="received"></span><br/><br/>
         $('#send').click(function(e) {
             e.preventDefault();
             console.log('I am sending...');
-            stompClient.send('/app/greeting');
+            stompClient.send('/app/chat');
         });
     });
 </script>

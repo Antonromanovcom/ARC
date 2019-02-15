@@ -7,28 +7,20 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.ModelAndView;
+import org.slf4j.*;
 
-import java.security.Principal;
+import java.util.Date;
+
 
 @Controller
 @RequestMapping("/")
 public class HomeController {
 
-/*
-    private SimpMessagingTemplate template;
-*/
+    private Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
     private SimpMessagingTemplate simpMessagingTemplate;
 
-/*
-    @Autowired
-    public HomeController(SimpMessagingTemplate template) {
-        this.template = template;
-    }
-
-*/
 
 
     @RequestMapping(method = RequestMethod.GET)
@@ -37,24 +29,42 @@ public class HomeController {
         return "home";
     }
 
-    @MessageMapping("/greeting")
+   /* @MessageMapping("/greeting")
         public String handle (String greeting){
             return "["  + ": " + greeting;
-        }
+        }*/
 
 
-/*
-    @MessageMapping("/greeting")
+    /*@MessageMapping("/hello")
+    @SendTo("/topic/greetings")
+    public void greeting() throws Exception {
+        System.out.println("Мы тут");
+        //Thread.sleep(1000); // simulated delay
+       // String reply = "hello " + principal.getName();
+      //  System.out.println("sending " + reply);
+       // return new Greeting("Hello, " + HtmlUtils.htmlEscape(message.getName()) + "!");
+    }*/
+
+    @MessageMapping("/chat")
+    @SendTo("/topic/message")
+    public OutputMessage sendMessage() {
+        //public OutputMessage sendMessage(Message message) {
+        logger.info("Message sent");
+        return new OutputMessage(new Message("Хуй"), new Date());
+    }
+
+
+
+    /*@MessageMapping("/greeting")
     public void greeting(Principal principal) {
         String reply = "hello " + principal.getName();
         System.out.println("sending " + reply);
-        //simpMessagingTemplate.convertAndSend("/user/{username}/reply", reply);
+        simpMessagingTemplate.convertAndSend("/user/{username}/reply", reply);
         //template.convertAndSendToUser(principal.getName(), "/reply", reply);
-        simpMessagingTemplate.convertAndSendToUser(principal.getName(), "/reply", reply);
+       // simpMessagingTemplate.convertAndSendToUser(principal.getName(), "/reply", reply);
         //simpMessagingTemplate.convertAndSendToUser("jim", "/reply", reply);
-    }
+    }*/
 
-    */
 
         //mvn -Djetty.port=8080 jetty:run
 

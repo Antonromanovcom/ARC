@@ -1,8 +1,10 @@
 com\javamaster\controller\HomeController.class
 com\javamaster\config\RootConfig.class
 com\javamaster\config\SecurityConfig.class
+com\javamaster\controller\Message.class
 com\javamaster\config\WebConfig.class
 com\javamaster\config\WebSocketConfig.class
+com\javamaster\controller\OutputMessage.class
 com\javamaster\config\MVCConfig.class
 com\javamaster\config\AppSecurityConfig.class
 com\javamaster\config\SecurityInit.class
