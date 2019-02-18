@@ -2,14 +2,16 @@ package com.javamaster.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.handler.annotation.Payload;
+import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
+import org.springframework.messaging.Message;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.slf4j.*;
+
 import java.security.Principal;
-import java.util.Date;
 
 
 @Controller
@@ -22,7 +24,6 @@ public class HomeController {
     private SimpMessagingTemplate simpMessagingTemplate;
 
 
-
     @RequestMapping(method = RequestMethod.GET)
     public String home() {
         System.out.println("МЫ ВОШЛИ....");
@@ -30,26 +31,32 @@ public class HomeController {
     }
 
 
-
-   /* @MessageMapping("/chat")
-    @SendTo("/topic/message")
-    public OutputMessage sendMessage() {
-        //public OutputMessage sendMessage(Message message) {
-        logger.info("Message sent");
-        return new OutputMessage(new Message("Хуй"), new Date());
-    }*/
     @MessageMapping("/chat")
-    public void  sendMessage(Principal principal) {
+    //public void  sendMessage(Principal principal) throws Exception {
+    public void sendMessage(Message<Object> message, @Payload ChatMessage chatMessage) throws Exception {
+        Principal principal = message.getHeaders().get(SimpMessageHeaderAccessor.USER_HEADER, Principal.class);
+        String authedSender = principal.getName();
+        chatMessage.setSender(authedSender);
 
-        String reply = "hello " + principal.getName();
-        System.out.println("sending " + reply);
+        System.out.println("sender =  " + authedSender);
+        String recipient = chatMessage.getRecipient();
+
+        if (authedSender.equals("bob")) {
+            recipient = "jim";
+        } else {
+            recipient = "bob";
+        }
+
+        logger.info("Message for - " + recipient);
+
+        if (!authedSender.equals(recipient)) {
+            simpMessagingTemplate.convertAndSendToUser(authedSender, "/reply", chatMessage);
+        }
+
+        simpMessagingTemplate.convertAndSendToUser(recipient, "/reply", chatMessage);
+
         logger.info("Message sent");
-       // simpMessagingTemplate.convertAndSendToUser(principal.getName(), "/reply", reply);
-        simpMessagingTemplate.convertAndSendToUser("jim", "/reply", reply);
-
     }
-
-
 
 
 }

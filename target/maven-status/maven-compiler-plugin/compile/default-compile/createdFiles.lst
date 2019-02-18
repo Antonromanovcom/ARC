@@ -1,5 +1,6 @@
 com\javamaster\config\SecurityConfig.class
 com\javamaster\config\WebSocketConfig.class
+com\javamaster\controller\ChatMessage.class
 com\javamaster\config\MVCConfig.class
 com\javamaster\controller\HomeController.class
 com\javamaster\config\RootConfig.class

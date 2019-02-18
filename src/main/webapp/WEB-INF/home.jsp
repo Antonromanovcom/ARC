@@ -34,7 +34,7 @@ Received Message To Me Only: <span id="received"></span><br/><br/>
 <script src="resources/stomp.js"></script>
 <script>
     $(document).ready(function () {
-        // console.log('? ??? - ' + whoIam());
+
         var userName = '';
         var localPath = '/restapi/users/whoiam';
         var remotePath = '/springwithoutxml/restapi/users/whoiam';
@@ -43,15 +43,12 @@ Received Message To Me Only: <span id="received"></span><br/><br/>
         var localSocketUserPath = '/user/';
         var serverMessageBrokerPath = '/app/chat';
 
-       // serverMessageBrokerPath = remoteSpocketPath + '/app/chat';
-        localSpocketEndPointPath = remoteSpocketPath + '/chat';
-        //localSocketUserPath = remoteSpocketPath + '/user/';
-        console.log('local Socket User Path: ' +  localSocketUserPath);
-        localPath = remotePath;
 
+       // localSpocketEndPointPath = remoteSpocketPath + '/chat';
+      //  localPath = remotePath;
+
+        console.log('local Socket User Path: ' +  localSocketUserPath);
         console.log('End Point: ' +  localSpocketEndPointPath);
-       // console.log('local Socket User Path without reply: ' +  localSocketUserPath + userName);
-       //  console.log('local Socket User Path: ' +  localSocketUserPath + userName + '/reply');
         console.log('Server Message Broker Path: ' +  serverMessageBrokerPath);
 
         var socket = new SockJS(localSpocketEndPointPath);
@@ -119,8 +116,12 @@ Received Message To Me Only: <span id="received"></span><br/><br/>
 
         $('#sendto').click(function (e) {
             e.preventDefault();
-            console.log('I am sending...');
-            stompClient.send(serverMessageBrokerPath);
+            var message = $('#message').val();
+            console.log('I am sending...' + message);
+            stompClient.send(serverMessageBrokerPath, {}, JSON.stringify({
+                'recipient': 'jim',
+                'message' : message
+            }));
 
             $.get(localPath, function (data) {
             //$.get("/restapi/users/whoiam", function (data) {
