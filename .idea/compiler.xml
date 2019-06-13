@@ -12,7 +12,7 @@
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="springwithoutxml" target="1.7" />
-      <module name="web-sockets-hello-world" target="1.8" />
+      <module name="web-sockets-hello-world" target="1.5" />
     </bytecodeTargetLevel>
   </component>
 </project>
